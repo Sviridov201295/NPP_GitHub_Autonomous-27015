@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="description" content="Публичный мониторинг игровой атомной электростанции Syndicate, DarkRP Garry's Mod."/>
+  <title>Syndicate NPP — Мониторинг АЭС</title>
+  <link rel="stylesheet" href="./styles.css"/>
+  <script type="module" src="./server-query.js"></script>
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="brand"><div class="brandmark">⚛</div><div><strong>SYNDICATE</strong><small>NPP CONTROL CENTER</small></div></div>
+      <div class="sidebar-label">МОНИТОРИНГ</div>
+      <nav class="nav" aria-label="Разделы"><a class="active" href="#overview">▦ <span>Обзор станции</span></a><a href="#reactor">◉ <span>Реактор ИР-60</span></a><a href="#turbine">◴ <span>Турбина</span></a><a href="#grid">ϟ <span>Электросеть</span></a><a href="#alerts">⚑ <span>Диагностика</span></a><a href="#server-query">◈ <span>Сервер A2S</span></a></nav>
+      <div class="sidebar-bottom"><div class="live-dot" id="sidebar-dot"></div><div><strong id="side-status">Нет телеметрии</strong><small id="side-updated">Ожидание подключения</small></div></div>
+    </aside>
+    <main class="main">
+      <header class="topbar"><div class="eyebrow">ЭНЕРГОСИСТЕМА ГОРОДА <span class="dotsep">/</span> АТОМНАЯ ЭЛЕКТРОСТАНЦИЯ</div><div class="top-actions"><span class="chip" id="mode-chip">ДАННЫХ НЕТ</span><span id="clock">—</span></div></header>
+      <div class="content">
+        <section class="hero" id="overview"><div><div class="eyebrow">ОПЕРАТИВНАЯ СВОДКА</div><h1>АЭС «Синдикат»</h1><p>Публичный мониторинг игровой атомной станции · открытые запросы Source A2S · обновление GitHub Actions</p></div><div class="hero-status"><div class="status-ring"><div class="status-ring-inner" id="hero-symbol">—</div></div><div><small>СОСТОЯНИЕ СТАНЦИИ</small><strong id="hero-status">НЕТ ДАННЫХ</strong><span id="hero-time">Подключите источник телеметрии</span></div></div></section>
+        <div class="banner" id="banner">АЭС не передаёт подтверждённую телеметрию через стандартный A2S: показатели реактора, турбины и ТВЭЛов недоступны без отдельного источника.</div>
+
+        <section class="panel query-panel" id="server-query" aria-label="Статус игрового сервера">
+          <div class="panel-heading"><div><div class="eyebrow">ПРЯМОЙ ОПРОС UDP / SOURCE A2S</div><h2>Игровой сервер · 45.12.63.132:27015</h2></div><span class="mini-status" id="query-state">ОЖИДАНИЕ</span></div>
+          <div class="detail-grid">
+            <div><span>Ответ A2S_INFO</span><strong id="query-info">—</strong></div>
+            <div><span>Название сервера</span><strong id="query-name">—</strong></div>
+            <div><span>Игроки онлайн</span><strong id="query-players">—</strong></div>
+            <div><span>Игровая карта</span><strong id="query-map">—</strong></div>
+            <div><span>Время последней проверки</span><strong id="query-updated">—</strong></div>
+            <div><span>A2S_RULES</span><strong id="query-rules">—</strong></div>
+          </div>
+          <div class="query-note" id="query-explanation">Опрос выполняется автоматически через GitHub Actions. Открытый порт не раскрывает показания АЭС сам по себе.</div>
+          <div class="query-rules" id="query-npp-fields" hidden><h3>Публично опубликованные значения, связанные с АЭС</h3><div id="query-fields-list"></div><p>Названия и значения получены из A2S_RULES, без подстановки демонстрационных данных. Неизвестные единицы измерения не угадываются.</p></div>
+        </section>
+        <section class="kpis" aria-label="Главные показатели">
+          <div class="kpi"><div class="kpi-top"><span>ГЕНЕРАЦИЯ СТАНЦИИ</span><span class="kpi-icon">ϟ</span></div><div class="kpi-number"><b id="gen">—</b><span>МВт</span></div><div class="kpi-foot" id="gen-foot">Текущая отдача</div></div>
+          <div class="kpi"><div class="kpi-top"><span>ПОТРЕБЛЕНИЕ ГОРОДА</span><span class="kpi-icon">▥</span></div><div class="kpi-number"><b id="load">—</b><span>МВт</span></div><div class="kpi-foot" id="load-foot">Общая нагрузка сети</div></div>
+          <div class="kpi"><div class="kpi-top"><span>ЗАПАС ТОПЛИВА</span><span class="kpi-icon">◷</span></div><div class="kpi-number"><b id="fuel">—</b><span class="unit-auto" id="fuel-unit">мин</span></div><div class="kpi-foot" id="fuel-foot">По сводке станции</div></div>
+          <div class="kpi"><div class="kpi-top"><span>ПРОБЛЕМЫ</span><span class="kpi-icon">⚑</span></div><div class="kpi-number"><b id="issues">—</b><span>шт.</span></div><div class="kpi-foot" id="issues-foot">Активные предупреждения</div></div>
+        </section>
+        <section class="twocol" id="grid"><article class="panel graph-panel"><div class="panel-heading"><div><div class="eyebrow">ТЕНДЕНЦИЯ</div><h2>Генерация и нагрузка</h2></div><div class="legend"><span><i class="legend-green"></i> Станция</span><span><i class="legend-orange"></i> Город</span></div></div><div class="chart-wrap"><svg class="chart" id="chart" viewBox="0 0 640 220" role="img" aria-label="График генерации и нагрузки"><text x="320" y="110" text-anchor="middle" fill="#7f91a2">Ожидание данных</text></svg></div><div class="chart-footer"><span>Динамика за последний час</span><span id="chart-samples">0 измерений</span></div></article>
+        <article class="panel supply-panel"><div class="panel-heading"><div><div class="eyebrow">ЭЛЕКТРОСЕТЬ</div><h2>Энергобаланс</h2></div><span class="mini-status" id="grid-state">—</span></div><div class="balance"><div><span>АЭС</span><b id="bal-station">—</b></div><div class="track"><span id="bar-station"></span></div><div><span>Резервная генерация</span><b id="bal-reserve">—</b></div><div class="track amber"><span id="bar-reserve"></span></div><div><span>Потребление</span><b id="bal-load">—</b></div><div class="track blue"><span id="bar-load"></span></div></div><div class="info-row"><span>Дефицит мощности</span><b id="deficit">—</b></div><div class="info-row"><span>Состояние города</span><b id="blackout">—</b></div></article></section>
+        <section class="twocol"><article class="panel" id="reactor"><div class="panel-heading"><div><div class="eyebrow">АКТИВНАЯ ЗОНА</div><h2>Реактор ИР-60</h2></div><span class="mini-status" id="rx-status">—</span></div><div class="reactor-summary"><div class="donut" id="donut"><div><b id="rods-count">—</b><small>из 60 каналов</small></div></div><div class="reactor-stats"><div><small>Свежие ТВЭЛы</small><b id="fresh">—</b></div><div><small>Отработавшие</small><b id="spent">—</b></div><div><small>Выгорание старшего</small><b id="wear">—</b></div><div><small>Уставка мощности</small><b id="setpoint">—</b></div></div></div><div class="detail-grid"><div><span>Мощность реактора</span><strong id="rx-power">—</strong></div><div><span>Температура контура</span><strong id="temp">—</strong></div><div><span>Давление</span><strong id="pressure">—</strong></div><div><span>Главные насосы</span><strong id="pumps">—</strong></div></div></article>
+        <article class="panel" id="turbine"><div class="panel-heading"><div><div class="eyebrow">ТУРБОГЕНЕРАТОР</div><h2>Турбина К-2,5-35</h2></div><span class="mini-status" id="tb-status">—</span></div><div class="rpm-wrap"><div class="rpm-numbers"><span>ЧАСТОТА ВРАЩЕНИЯ</span><div><b id="rpm">—</b><small>об/мин</small></div></div><div class="track thick"><span id="bar-rpm"></span></div><div class="rpm-range"><span>0</span><span>3000 номинал</span><span>3300</span></div></div><div class="detail-grid"><div><span>Нагрузка</span><strong id="tb-load">—</strong></div><div><span>Пар</span><strong id="steam">—</strong></div><div><span>Вакуум</span><strong id="vac">—</strong></div><div><span>Масло</span><strong id="oil">—</strong></div><div><span>Подшипники</span><strong id="bearing">—</strong></div><div><span>В сеть</span><strong id="tb-grid">—</strong></div><div><span>Загрязнение конденсатора</span><strong id="fouling">—</strong></div><div><span>До низкого уровня масла</span><strong id="oil-left">—</strong></div><div><span>До срыва вакуума</span><strong id="foul-left">—</strong></div></div></article></section>
+        <section class="twocol"><article class="panel waste-panel"><div class="panel-heading"><div><div class="eyebrow">ОБСЛУЖИВАНИЕ</div><h2>ТВЭЛы и отходы</h2></div></div><div class="detail-grid"><div><span>Заполнение бака отходов</span><strong id="waste">—</strong></div><div><span>ТВЭЛов на складе станции</span><strong id="rack">—</strong></div><div><span>Бочка на закатке</span><strong id="drum">—</strong></div><div><span>Сдано бочек за смену</span><strong id="sent">—</strong></div><div><span>Детали пульта</span><strong id="panel-parts">—</strong></div><div><span>Аварийная защита</span><strong id="trip">—</strong></div><div><span>Состояние пульта</span><strong id="panel-status">—</strong></div><div><span>Вентиляция</span><strong id="vent">—</strong></div></div></article>
+        <article class="panel alerts-panel" id="alerts"><div class="panel-heading"><div><div class="eyebrow">ДИАГНОСТИКА</div><h2>Текущие замечания</h2></div><span class="mini-status" id="issue-total">—</span></div><div class="problem-list" id="problem-list"><div class="empty">Нет данных о неисправностях.</div></div></article></section>
+        <section class="panel event-panel"><div class="panel-heading"><div><div class="eyebrow">ИСТОРИЯ</div><h2>Журнал событий</h2></div></div><div class="event-list" id="event-list"><div class="empty">Журнал АЭС недоступен через стандартный Source A2S.</div></div></section>
+        <footer><span>SYNDICATE NPP MONITOR · READ ONLY · НЕ УПРАВЛЯЕТ АЭС</span><span id="footer-state">Источник не подключён</span></footer>
+      </div>
+    </main>
+  </div>
+</body>
+</html>
